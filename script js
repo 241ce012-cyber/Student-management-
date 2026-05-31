@@ -1,0 +1,136 @@
+// Select elements
+
+const form = document.querySelector("form");
+const table = document.querySelector("table");
+
+
+// Add Student
+
+form.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    // Input values
+
+    const inputs = form.querySelectorAll("input");
+
+    const name = inputs[0].value;
+    const email = inputs[1].value;
+    const department = inputs[2].value;
+    const phone = inputs[3].value;
+    const marks = inputs[4].value;
+    const attendance = inputs[5].value;
+
+    // Validation
+
+    if(
+        name === "" ||
+        email === "" ||
+        department === "" ||
+        phone === "" ||
+        marks === "" ||
+        attendance === ""
+    ){
+        alert("Please fill all fields");
+        return;
+    }
+
+    // Create row
+
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+        <td>${Math.floor(Math.random() * 1000)}</td>
+        <td>${name}</td>
+        <td>${department}</td>
+        <td>${marks}</td>
+        <td>${attendance}</td>
+        <td>
+            <button class="edit">Edit</button>
+            <button class="delete">Delete</button>
+        </td>
+    `;
+
+    table.appendChild(row);
+
+    // Clear form
+
+    form.reset();
+
+});
+
+
+// Delete Student
+
+table.addEventListener("click", function(e){
+
+    if(e.target.classList.contains("delete")){
+
+        if(confirm("Delete this student?")){
+
+            e.target.parentElement.parentElement.remove();
+
+        }
+
+    }
+
+});
+
+
+// Edit Student
+
+table.addEventListener("click", function(e){
+
+    if(e.target.classList.contains("edit")){
+
+        const row = e.target.parentElement.parentElement;
+
+        const name = row.children[1].innerText;
+        const department = row.children[2].innerText;
+        const marks = row.children[3].innerText;
+        const attendance = row.children[4].innerText;
+
+        const inputs = form.querySelectorAll("input");
+
+        inputs[0].value = name;
+        inputs[2].value = department;
+        inputs[4].value = marks;
+        inputs[5].value = attendance;
+
+        row.remove();
+
+    }
+
+});
+
+
+// Search Student
+
+const search = document.querySelector(".header input");
+
+search.addEventListener("keyup", function(){
+
+    const value = search.value.toLowerCase();
+
+    const rows = table.querySelectorAll("tr");
+
+    rows.forEach(function(row, index){
+
+        if(index === 0) return;
+
+        const name = row.children[1].innerText.toLowerCase();
+
+        if(name.includes(value)){
+
+            row.style.display = "";
+
+        }
+        else{
+
+            row.style.display = "none";
+
+        }
+
+    });
+
+});
